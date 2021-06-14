@@ -14,7 +14,10 @@ function App() {
     const message = useSelector(selectMessage)
     const data = useSelector(selectData)
 
-    if(message || data.statusCode === 200){
+    if(message){
+        history.push("/me");
+    }
+    if(data && data.statusCode === 200){
         history.push("/me");
     }
     return (
