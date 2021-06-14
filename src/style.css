@@ -1,0 +1,70 @@
+
+.App{
+    width: 1000px;
+    margin: 0 auto;
+    height: 100%;
+    padding-top: 150px;
+}
+
+.InputItem{
+    padding: 15px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.FieldSettings{
+    padding: 10px;
+    width: 400px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin: 25px;
+}
+
+.settings-button-wrapper{
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.settings-button{
+    width: 150px;
+    height: 40px;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+    margin: 40px 10px;
+}
+
+.settings-button-disabled{
+    width: 150px;
+    height: 40px;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+}
+
+.Auth{
+    text-align: center;
+}
+
+.label{
+    margin-right: 30px;
+}
+
+.InputWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.UserPage{
+    text-align: center;
+}
+
+.NavLink{
+    text-decoration: none;
+    color: black;
+    border-bottom: 1px solid #cccccc;
+}
