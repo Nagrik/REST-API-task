@@ -13,7 +13,7 @@ function App() {
     const selectData = ({auth}) => auth.data
     const message = useSelector(selectMessage)
     const data = useSelector(selectData)
-
+    console.log(message)
     if(message){
         history.push("/me");
     }
@@ -23,7 +23,9 @@ function App() {
     return (
         <div className="App">
                 <Route exact path="/" component={Forms}/>
-                <Route exact path="/me" component={UserPage} />
+            <Route exact path="/me" >
+                <UserPage message={message}/>
+            </Route>
         </div>
     );
 }
