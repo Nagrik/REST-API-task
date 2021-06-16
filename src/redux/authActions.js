@@ -25,40 +25,8 @@ function refreshToken(token) {
     }
 }
 
-export async function fetchWithAuth(url, options) {
 
-    const loginUrl = '/'; // url страницы для авторизации
-    let tokenData = null; // объявляем локальную переменную tokenData
-
-    if (sessionStorage.tokenData) { // если в sessionStorage присутствует tokenData, то берем её
-        tokenData = JSON.parse(localStorage.tokenData);
-    } else {
-        return window.location.replace(loginUrl); // если токен отсутствует, то перенаправляем пользователя на страницу авторизации
-    }
-
-    if (!options.headers) { // если в запросе отсутствует headers, то задаем их
-        options.headers = {};
-    }
-
-    if (tokenData) {
-        if (Date.now() >= tokenData.expires_on * 1000) { // проверяем не истек ли срок жизни токена
-            try {
-                const newToken = refreshToken() // если истек, то обновляем токен с помощью refresh_token
-                saveToken(newToken);
-            } catch (e) { // если тут что-то пошло не так, то перенаправляем пользователя на страницу авторизации
-                return  window.location.replace(loginUrl);
-            }
-        }
-        console.log('TokenData', tokenData)
-        options.headers.Authorization = `Bearer ${tokenData.token}`; // добавляем токен в headers запроса
-    }
-
-    return fetch(url, options); // возвращаем изначальную функцию, но уже с валидным токеном в headers
-}
-
-
-
-export function login(email, password, isLogin) {
+export function login(email, password) {
     return async (dispatch) => {
         const authData = {
             email, password,
@@ -79,14 +47,14 @@ export function login(email, password, isLogin) {
 
     }
 }
-export function registration(email, password, isLogin) {
+
+export function registration(email, password) {
     return async () => {
         const authData = {
             email, password,
         }
         let RegUrl = 'http://142.93.134.108:1111/sign_up'
 
-        console.log(isLogin)
         const response = await axios.post(RegUrl, authData)
         const data = response.data
         console.log(data)
@@ -109,6 +77,7 @@ export function showContentToPage(data){
 }
 
 export function showContent(data){
+    refreshToken(data.body.access_token)
     return async (dispatch) => {
         let ShowUrl = `http://142.93.134.108:1111/me`
         const response = await axios.get(ShowUrl,{

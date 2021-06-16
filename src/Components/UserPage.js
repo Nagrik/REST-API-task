@@ -1,4 +1,3 @@
-import {NavLink} from "react-router-dom";
 import {useState} from "react";
 
 const UserPage = ({message}) => {
@@ -9,7 +8,6 @@ const UserPage = ({message}) => {
             {
                 storage ? <h1>{storage}</h1> : <h1>{message}</h1>
             }
-            <NavLink to="/" className="NavLink">Back to registration</NavLink>
         </div>
     );
 };
