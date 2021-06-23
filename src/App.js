@@ -13,7 +13,6 @@ function App() {
     const selectData = ({auth}) => auth.data
     const message = useSelector(selectMessage)
     const data = useSelector(selectData)
-    console.log(message)
     if (message) {
         history.push("/me");
     }

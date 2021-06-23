@@ -2,7 +2,6 @@ import {useState} from "react";
 
 const UserPage = ({message}) => {
     const [storage, setStorage] = useState(window.sessionStorage.userInfo);
-    console.log(message)
     return (
         <div className='UserPage'>
             {

@@ -9,6 +9,16 @@ function saveUserInfo(data) {
     sessionStorage.setItem('userInfo', JSON.stringify(data));
 }
 
+axios.interceptors.response.use(function (response,token) {
+    if(response.data.statusCode === 200){
+        refreshToken(token)
+    }
+    return response;
+}, function (error) {
+    alert('something went wrong...')
+    return Promise.reject(error);
+});
+
 function refreshToken(token) {
     return async () => {
         let refreshUrl = `http://142.93.134.108:1111/refresh`
@@ -57,7 +67,6 @@ export function registration(email, password) {
 
         const response = await axios.post(RegUrl, authData)
         const data = response.data
-        console.log(data)
         alert(data.message)
 
     }
@@ -77,7 +86,6 @@ export function showContentToPage(data){
 }
 
 export function showContent(data){
-    refreshToken(data.body.access_token)
     return async (dispatch) => {
         let ShowUrl = `http://142.93.134.108:1111/me`
         const response = await axios.get(ShowUrl,{
@@ -90,6 +98,8 @@ export function showContent(data){
         saveUserInfo(JSON.stringify(resData.body.message))
     }
 }
+
+
 
 
 
