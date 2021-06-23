@@ -5,26 +5,41 @@ import {AUTH_SUCCESS, SHOW_CONTENT} from "./types";
 function saveToken(token) {
     sessionStorage.setItem('tokenData', JSON.stringify(token));
 }
+
 function saveUserInfo(data) {
     sessionStorage.setItem('userInfo', JSON.stringify(data));
 }
 
-axios.interceptors.response.use(function (response,token) {
-    if(response.data.statusCode === 200){
+
+// Add a request interceptor
+axios.interceptors.request.use(
+    (config, token) => {
         refreshToken(token)
+        return config;
+    },
+    error => {
+        Promise.reject(error)
+    });
+
+
+//Add a response interceptor
+axios.interceptors.response.use((response) => {
+    return response
+}, function (error, token, response) {
+    if (error.response.statusCode === 401) {
+        refreshToken( token)
+        return Promise.reject(error);
     }
-    return response;
-}, function (error) {
-    alert('something went wrong...')
-    return Promise.reject(error);
+    return response
 });
+
 
 function refreshToken(token) {
     return async () => {
         let refreshUrl = `http://142.93.134.108:1111/refresh`
-        await axios.post(refreshUrl,{
-            headers:{
-                Authorization:`Bearer ${token}`
+        await axios.post(refreshUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`
             }
         }).then((res) => {
             if (res.status === 200) {
@@ -42,16 +57,16 @@ export function login(email, password) {
             email, password,
         }
 
-        let  LogUrl = `http://142.93.134.108:1111/login?email=${email}&password=${password}`
+        let LogUrl = `http://142.93.134.108:1111/login?email=${email}&password=${password}`
 
-         await axios.post(LogUrl, authData).then((res) => {
+        await axios.post(LogUrl, authData).then((res) => {
             const tokenData = res.data.body
             saveToken(JSON.stringify(tokenData))
             dispatch(authSuccess(res.data))
-            if(res.data.statusCode === 200){
-            dispatch(showContent(res.data))
-            }else{
-               alert(res.data.message || 'user not found')
+            if (res.data.statusCode === 200) {
+                dispatch(showContent(res.data))
+            } else {
+                alert(res.data.message || 'user not found')
             }
         })
 
@@ -71,26 +86,27 @@ export function registration(email, password) {
 
     }
 }
-export function authSuccess(data){
-    return{
+
+export function authSuccess(data) {
+    return {
         type: AUTH_SUCCESS,
         data
     }
 }
 
-export function showContentToPage(data){
-    return{
-        type:SHOW_CONTENT,
+export function showContentToPage(data) {
+    return {
+        type: SHOW_CONTENT,
         data
     }
 }
 
-export function showContent(data){
+export function showContent(data) {
     return async (dispatch) => {
         let ShowUrl = `http://142.93.134.108:1111/me`
-        const response = await axios.get(ShowUrl,{
-            headers:{
-                Authorization:`Bearer ${data.body.access_token}`
+        const response = await axios.get(ShowUrl, {
+            headers: {
+                Authorization: `Bearer ${data.body.access_token}`
             }
         })
         const resData = response.data

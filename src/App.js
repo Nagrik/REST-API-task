@@ -25,6 +25,7 @@ function App() {
             <Route exact path="/me">
                 <UserPage message={message}/>
             </Route>
+            <Route history = {history}/>
             {
                 sessionStorage.tokenData ? <Redirect to="/me"/> : <Redirect to="/"/>
             }
