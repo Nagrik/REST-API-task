@@ -27,8 +27,8 @@ axios.interceptors.response.use((response) => {
     return response
 }, function (error, token, response) {
     if (error.response.statusCode === 401) {
-        refreshToken( token)
-        return Promise.reject(error);
+        refreshToken(token)
+        return response
     }
     return response
 });
@@ -61,10 +61,10 @@ export function login(email, password) {
 
         await axios.post(LogUrl, authData).then((res) => {
             const tokenData = res.data.body
-            saveToken(JSON.stringify(tokenData))
-            dispatch(authSuccess(res.data))
             if (res.data.statusCode === 200) {
+                saveToken(JSON.stringify(tokenData))
                 dispatch(showContent(res.data))
+                dispatch(authSuccess(res.data))
             } else {
                 alert(res.data.message || 'user not found')
             }

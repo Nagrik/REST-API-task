@@ -13,11 +13,11 @@ function App() {
     const selectData = ({auth}) => auth.data
     const message = useSelector(selectMessage)
     const data = useSelector(selectData)
-    if (message) {
-        history.push("/me");
-    }
+
     if (data && data.statusCode === 200) {
         history.push("/me");
+    }else if(data && data.status_code === 401){
+        history.push("/")
     }
     return (
         <div className="App">
